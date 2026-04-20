@@ -52,11 +52,12 @@ MonoBehaviour:
   - {fileID: -6613794951689082208, guid: 265a85705425df54bbabfbaaa0f7982b, type: 3}
   - {fileID: 40701928262675801, guid: 5c0303de646841f49870c99a830a7860, type: 3}
   - {fileID: -1337382102042332801, guid: 7556acba27087564f829c358ce1f7b48, type: 3}
-  _explosionEffect: {fileID: 0}
+  _explosionEffect: {fileID: 7791025893348938502, guid: 7d683e5173eee60418ed285e852832eb, type: 3}
   _rotationSpeed: 20
-  _moveSpeed: 2
-  _scaleRange: {x: 0.5, y: 1.5}
+  _moveSpeed: 1.5
   _lifetime: 20
+  scaleRange: {x: 0.5, y: 1.5}
+  size: 1
 --- !u!212 &4963806365198587010
 SpriteRenderer:
   serializedVersion: 2

@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] private Player player;
+    [SerializeField] private ParticleSystem _explosionEffect;
     [SerializeField] private float respawnDelay = 3f;
     [SerializeField] private float invulnerableDuration = 3f;
 
@@ -15,14 +16,21 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-	void OnDestroy()
-	{
-		Instance = null;
-	}
+    void OnDestroy()
+    {
+        Instance = null;
+    }
 
-	public void PlayerDied()
+    public void SpawnExplosion(Vector2 position)
+    {
+        if (_explosionEffect == null) return;
+        Instantiate(_explosionEffect, position, Quaternion.identity);
+    }
+
+    public void PlayerDied()
     {
         _lives--;
+        SpawnExplosion(player.transform.position);
 
         if (_lives <= 0)
         {

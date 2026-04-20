@@ -4,7 +4,6 @@ using UnityEngine;
 public class Asteroid : MonoBehaviour
 {
     [SerializeField] private Sprite[] _sprites;
-    [SerializeField] private ParticleSystem _explosionEffect;
     [SerializeField] private float _rotationSpeed = 20f;
     [SerializeField] private float _moveSpeed = 1f;
     [SerializeField] private float _lifetime = 20f;
@@ -49,22 +48,14 @@ public class Asteroid : MonoBehaviour
         {
             int splitAmount = 2;
             AsteroidSpawner.SPLIT_ASTEROID?.Invoke(
-                splitAmount, 
-                this.transform.position, 
+                splitAmount,
+                this.transform.position,
                 this.size
             );
         }
 
-        if (_explosionEffect != null)
-        {
-            Instantiate(_explosionEffect, transform.position, Quaternion.identity);
-            _spriteRenderer.enabled = false;
-            Destroy(gameObject, _explosionEffect.main.duration);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        GameManager.Instance.SpawnExplosion(transform.position);
+        Destroy(gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D collision)

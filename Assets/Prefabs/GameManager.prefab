@@ -44,3 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a90da5b66dd4b348b60be29d8dcbca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  player: {fileID: 0}
+  _explosionEffect: {fileID: 7791025893348938502, guid: 7d683e5173eee60418ed285e852832eb, type: 3}
+  respawnDelay: 3
+  invulnerableDuration: 3
