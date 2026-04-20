@@ -4,6 +4,7 @@ public class AsteroidSpawner : MonoBehaviour
 {
     public static System.Action<int, Vector2, float> SPLIT_ASTEROID;
 
+    [SerializeField] private GameObject asteroidContainer;
     [SerializeField] private GameObject asteroidPrefab;
     [SerializeField] private float spawnInterval = 2f;
     [SerializeField] private float spawnRadius = 10f;
@@ -16,6 +17,14 @@ public class AsteroidSpawner : MonoBehaviour
         InvokeRepeating(nameof(SpawnAsteroid), 1f, spawnInterval);
     }
 
+    public void Reset()
+    {
+        foreach (Transform child in asteroidContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     private void SpawnAsteroid()
     {
         for (int i = 0; i < spawnAmount; i++)
@@ -26,7 +35,12 @@ public class AsteroidSpawner : MonoBehaviour
             float spawnAngle = Random.Range(-spawnAngleRange, spawnAngleRange);
             Quaternion spawnRotation = Quaternion.AngleAxis(spawnAngle, Vector3.forward);
 
-            Asteroid asteroid = Instantiate(asteroidPrefab, spawnPosition, spawnRotation).GetComponent<Asteroid>();
+            Asteroid asteroid = Instantiate(
+                asteroidPrefab, 
+                spawnPosition, 
+                spawnRotation, 
+                asteroidContainer.transform)
+                .GetComponent<Asteroid>();
             asteroid.size = Random.Range(asteroid.scaleRange.x, asteroid.scaleRange.y);
             asteroid.Init(-spawnDirection);
         }
@@ -42,7 +56,12 @@ public class AsteroidSpawner : MonoBehaviour
             float spawnAngle = Random.Range(0f, 360f);
             Quaternion spawnRotation = Quaternion.AngleAxis(spawnAngle, Vector3.forward);
 
-            Asteroid asteroid = Instantiate(asteroidPrefab, spawnPosition, spawnRotation).GetComponent<Asteroid>();
+            Asteroid asteroid = Instantiate(
+                asteroidPrefab, 
+                spawnPosition, 
+                spawnRotation, 
+                asteroidContainer.transform)
+                .GetComponent<Asteroid>();
             asteroid.size = scale * 0.5f;
             asteroid.Init(-spawnDirection);
         }

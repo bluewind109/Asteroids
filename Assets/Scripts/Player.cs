@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 public class Player : MonoBehaviour
 {
+    [SerializeField] private GameObject _bulletContainer;
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private float _bulletSpeed = 10f;
 
@@ -30,7 +31,12 @@ public class Player : MonoBehaviour
 
     private void Shoot()
     {
-        Bullet bullet = Instantiate(_bulletPrefab, transform.position, transform.rotation).GetComponent<Bullet>();
+        Bullet bullet = Instantiate(
+            _bulletPrefab, 
+            transform.position, 
+            transform.rotation, 
+            _bulletContainer.transform)
+            .GetComponent<Bullet>();
         bullet.Init(transform.up, _bulletSpeed);
     }
 

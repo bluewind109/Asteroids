@@ -5,12 +5,15 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] private Player player;
+    [SerializeField] private AsteroidSpawner asteroidSpawner;
+    [SerializeField] private GameObject particleContainer;
+
     [SerializeField] private ParticleSystem _explosionEffect;
     [SerializeField] private float respawnDelay = 3f;
     [SerializeField] private float invulnerableDuration = 3f;
 
-    private int score = 0;
-
+    private bool isGameOver = false;
+    private int _score = 0;
     private int _lives = 3;
 
     void Awake()
@@ -23,18 +26,43 @@ public class GameManager : MonoBehaviour
         Instance = null;
     }
 
+    void Update()
+    {
+        if (isGameOver)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ResetartGame();
+            }
+        }
+    }
+
+    void ResetartGame()
+    {
+        isGameOver = false;
+        _score = 0;
+        _lives = 3;
+        Respawn();
+        asteroidSpawner.Reset();
+    }
+
     public void SpawnExplosion(Vector2 position)
     {
         if (_explosionEffect == null) return;
-        Instantiate(_explosionEffect, position, Quaternion.identity);
+        Instantiate(
+            _explosionEffect, 
+            position, 
+            Quaternion.identity, 
+            particleContainer.transform
+        );
     }
 
     public void OnAsteroidDestroyed(float size, Vector2 position)
     {
         int points = Mathf.RoundToInt(size * 10);
-        score += points;
+        _score += points;
         SpawnExplosion(position);
-        Debug.Log("Score: " + score);
+        Debug.Log("Score: " + _score);
     }
 
     public void OnPlayerDied()
@@ -48,13 +76,13 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        this.player.transform.position = Vector3.zero;
-        this.player.transform.rotation = Quaternion.identity;
         Invoke(nameof(Respawn), respawnDelay);
     }
 
     private void Respawn()
     {
+        this.player.transform.position = Vector3.zero;
+        this.player.transform.rotation = Quaternion.identity;
         this.player.UpdateColor(Color.red);
         this.player.gameObject.layer = LayerMask.NameToLayer("IgnoreCollision");
         this.player.gameObject.SetActive(true);
@@ -70,5 +98,6 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("Game Over!");
+        isGameOver = true;
     }
 }
