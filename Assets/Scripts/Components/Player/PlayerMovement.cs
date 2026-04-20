@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (this.gameObject.activeSelf == false)
+            return;
+
         isThrusting = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
