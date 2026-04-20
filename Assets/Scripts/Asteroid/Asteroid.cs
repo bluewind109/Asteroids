@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Asteroid : MonoBehaviour
@@ -6,8 +7,11 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private ParticleSystem _explosionEffect;
     [SerializeField] private float _rotationSpeed = 20f;
     [SerializeField] private float _moveSpeed = 1f;
-    [SerializeField] private Vector2 _scaleRange = new Vector2(0.5f, 1.5f);
     [SerializeField] private float _lifetime = 20f;
+
+    public Vector2 scaleRange = new Vector2(0.5f, 1.5f);
+
+    public float size = 1f;
 
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rb;
@@ -22,13 +26,12 @@ public class Asteroid : MonoBehaviour
     {
         _spriteRenderer.sprite = _sprites[Random.Range(0, _sprites.Length)];
         this.transform.eulerAngles = new Vector3(0, 0, Random.Range(0f, 360f));
-        float scale = Random.Range(_scaleRange.x, _scaleRange.y);
-        this.transform.localScale = new Vector3(scale, scale, 1);
+        this.transform.localScale = Vector3.one * this.size;
 
-        _rb.mass = scale; // Mass proportional to size
+        _rb.mass = size; // Mass proportional to size
     }
 
-    public void SetTrajectory(Vector2 direction)
+    public void Init(Vector2 direction)
     {
         _rb.AddForce(direction.normalized * _moveSpeed, ForceMode2D.Impulse);
         Destroy(gameObject, _lifetime);
@@ -41,6 +44,17 @@ public class Asteroid : MonoBehaviour
 
     private void Explode()
     {
+        // Explode into smaller asteroids if large enough
+        if (this.transform.localScale.x > scaleRange.x * 1.5f)
+        {
+            int splitAmount = 2;
+            AsteroidSpawner.SPLIT_ASTEROID?.Invoke(
+                splitAmount, 
+                this.transform.position, 
+                this.size
+            );
+        }
+
         if (_explosionEffect != null)
         {
             Instantiate(_explosionEffect, transform.position, Quaternion.identity);
@@ -50,7 +64,6 @@ public class Asteroid : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            return;
         }
     }
 

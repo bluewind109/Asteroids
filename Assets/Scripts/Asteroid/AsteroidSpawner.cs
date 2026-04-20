@@ -1,16 +1,18 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AsteroidSpawner : MonoBehaviour
 {
+    public static System.Action<int, Vector2, float> SPLIT_ASTEROID;
+
     [SerializeField] private GameObject asteroidPrefab;
     [SerializeField] private float spawnInterval = 2f;
-    [SerializeField] private int spawnAmount = 1;
     [SerializeField] private float spawnRadius = 10f;
+    [SerializeField] private int spawnAmount = 1;
     [SerializeField] private float spawnAngleRange = 15f;
 
     void Start()
     {
+        SPLIT_ASTEROID += SplitAsteroid;
         InvokeRepeating(nameof(SpawnAsteroid), 1f, spawnInterval);
     }
 
@@ -25,6 +27,24 @@ public class AsteroidSpawner : MonoBehaviour
             Quaternion spawnRotation = Quaternion.AngleAxis(spawnAngle, Vector3.forward);
 
             Asteroid asteroid = Instantiate(asteroidPrefab, spawnPosition, spawnRotation).GetComponent<Asteroid>();
-            asteroid.SetTrajectory(-spawnDirection);}
+            asteroid.size = Random.Range(asteroid.scaleRange.x, asteroid.scaleRange.y);
+            asteroid.Init(-spawnDirection);
+        }
+    }
+
+    private void SplitAsteroid(int count, Vector2 position, float scale)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 spawnDirection = Random.insideUnitCircle.normalized;
+            Vector2 spawnPosition = position + Random.insideUnitCircle * 0.5f;
+
+            float spawnAngle = Random.Range(0f, 360f);
+            Quaternion spawnRotation = Quaternion.AngleAxis(spawnAngle, Vector3.forward);
+
+            Asteroid asteroid = Instantiate(asteroidPrefab, spawnPosition, spawnRotation).GetComponent<Asteroid>();
+            asteroid.size = scale * 0.5f;
+            asteroid.Init(-spawnDirection);
+        }
     }
 }

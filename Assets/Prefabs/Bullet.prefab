@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b1a8c8db2b201c4a8023f865a1ccab4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  lifetime: 2
+  lifetime: 5
 --- !u!212 &5466463836965746805
 SpriteRenderer:
   serializedVersion: 2
