@@ -7,6 +7,7 @@ public class Asteroid : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 20f;
     [SerializeField] private float _moveSpeed = 1f;
     [SerializeField] private Vector2 _scaleRange = new Vector2(0.5f, 1.5f);
+    [SerializeField] private float _lifetime = 20f;
 
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rb;
@@ -27,6 +28,12 @@ public class Asteroid : MonoBehaviour
         _rb.mass = scale; // Mass proportional to size
     }
 
+    public void SetTrajectory(Vector2 direction)
+    {
+        _rb.AddForce(direction.normalized * _moveSpeed, ForceMode2D.Impulse);
+        Destroy(gameObject, _lifetime);
+    }
+
     void Update()
     {
         transform.Rotate(0, 0, _rotationSpeed * Time.deltaTime);
@@ -34,9 +41,17 @@ public class Asteroid : MonoBehaviour
 
     private void Explode()
     {
-        Instantiate(_explosionEffect, transform.position, Quaternion.identity);
-        _spriteRenderer.enabled = false;
-        Destroy(gameObject, _explosionEffect.main.duration);
+        if (_explosionEffect != null)
+        {
+            Instantiate(_explosionEffect, transform.position, Quaternion.identity);
+            _spriteRenderer.enabled = false;
+            Destroy(gameObject, _explosionEffect.main.duration);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -44,6 +59,7 @@ public class Asteroid : MonoBehaviour
         if (collision.CompareTag("Bullet"))
         {
             Explode();
+            Destroy(collision.gameObject);
         }
     }
 }
