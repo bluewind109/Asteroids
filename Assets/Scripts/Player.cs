@@ -28,11 +28,12 @@ public class Player : MonoBehaviour
         bullet.Init(transform.up, bulletSpeed);
     }
 
-	void OnTriggerEnter2D(Collider2D collision)
+	void OnCollisionEnter2D(Collision2D collision)
 	{
-        if (collision.CompareTag("Asteroid"))
+        if (collision.gameObject.CompareTag("Asteroid"))
         {
-            Destroy(gameObject);
+            playerMovement.Deactivate();
+            GameManager.Instance.PlayerDied();
         }
 	}
 }

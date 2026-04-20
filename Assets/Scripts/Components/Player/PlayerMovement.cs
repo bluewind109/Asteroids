@@ -9,6 +9,14 @@ public class PlayerMovement : MonoBehaviour
     private bool isThrusting = false;
     private float turnDirection;
 
+    public void Deactivate()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = 0f;
+
+        this.gameObject.SetActive(false);
+    }
+
     void Update()
     {
         isThrusting = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
@@ -27,8 +35,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-	void FixedUpdate()
-	{
+    void FixedUpdate()
+    {
         if (isThrusting)
         {
             rb.AddForce(transform.up * moveSpeed);
@@ -38,5 +46,5 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddTorque(turnDirection * turnSpeed);
         }
-	}
+    }
 }
