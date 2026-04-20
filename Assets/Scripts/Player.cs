@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Asteroid"))
         {
             _playerMovement.Deactivate();
-            GameManager.Instance.PlayerDied();
+            GameManager.Instance.OnPlayerDied();
         }
 	}
 }

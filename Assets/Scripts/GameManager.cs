@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float respawnDelay = 3f;
     [SerializeField] private float invulnerableDuration = 3f;
 
+    private int score = 0;
+
     private int _lives = 3;
 
     void Awake()
@@ -27,7 +29,15 @@ public class GameManager : MonoBehaviour
         Instantiate(_explosionEffect, position, Quaternion.identity);
     }
 
-    public void PlayerDied()
+    public void OnAsteroidDestroyed(float size, Vector2 position)
+    {
+        int points = Mathf.RoundToInt(size * 10);
+        score += points;
+        SpawnExplosion(position);
+        Debug.Log("Score: " + score);
+    }
+
+    public void OnPlayerDied()
     {
         _lives--;
         SpawnExplosion(player.transform.position);
