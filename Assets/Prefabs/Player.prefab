@@ -48,8 +48,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e84b17280f0a6654b8e11a434fea07fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  bulletPrefab: {fileID: 4900228629492362989, guid: 4ca0b3768a0e1a846ab403b3bda2d677, type: 3}
-  bulletSpeed: 10
+  _spriteRenderer: {fileID: 0}
+  _bulletPrefab: {fileID: 4900228629492362989, guid: 4ca0b3768a0e1a846ab403b3bda2d677, type: 3}
+  _bulletSpeed: 10
 --- !u!114 &5752653770889164399
 MonoBehaviour:
   m_ObjectHideFlags: 0

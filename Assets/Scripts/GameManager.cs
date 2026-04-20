@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Player player;
     [SerializeField] private float respawnDelay = 3f;
+    [SerializeField] private float invulnerableDuration = 3f;
 
     private int _lives = 3;
 
@@ -36,7 +37,16 @@ public class GameManager : MonoBehaviour
 
     private void Respawn()
     {
+        this.player.UpdateColor(Color.red);
+        this.player.gameObject.layer = LayerMask.NameToLayer("IgnoreCollision");
         this.player.gameObject.SetActive(true);
+        Invoke(nameof(TurnOnCollision), invulnerableDuration);
+    }
+
+    private void TurnOnCollision()
+    {
+        this.player.UpdateColor(Color.white);
+        this.player.gameObject.layer = LayerMask.NameToLayer("Player");
     }
 
     private void GameOver()
